@@ -73,3 +73,7 @@ tile2ee is distributed under the terms and conditions of the MIT license. This l
 External libraries and include files are assumed to be located in the subfolders "zlib", "squish" and "pngquant". The libraries are providing their own instructions how to compile them. Afterwards call "make" to build tile2ee. **Note:** You'll need a compiler that supports the C++11 standard.
 
 If you want to change paths for the external libraries or include files, you can do so by modifying the file "config.mk" by hand.
+
+
+### CONTACT
+If you have questions or comments please post them on [Spellhold Studios](http://www.shsforums.net/topic/58219-tile2ee-a-mos-and-tis-converter/) or contact me (Argent77) by private message on the same forum.
