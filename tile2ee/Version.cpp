@@ -22,8 +22,8 @@ THE SOFTWARE.
 #include "Version.hpp"
 
 int vers_major = 0;
-int vers_minor = 0;
-int vers_patch = 1;
-char vers_suffix[] = "beta";
+int vers_minor = 1;
+int vers_patch = 0;
+char vers_suffix[] = "";
 char prog_name[] = "tile2ee";
 char author[] = "Argent77";
