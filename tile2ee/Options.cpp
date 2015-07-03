@@ -193,7 +193,11 @@ bool Options::init(int argc, char *argv[]) noexcept
         if (std::strlen(vers_suffix)) {
           std::printf("%s %d.%d.%d (%s) by %s\n", prog_name, vers_major, vers_minor, vers_patch, vers_suffix, author);
         } else {
-          std::printf("%s %d.%d.%d by %s\n", prog_name, vers_major, vers_minor, vers_patch, author);
+          if (vers_patch != 0) {
+            std::printf("%s %d.%d.%d by %s\n", prog_name, vers_major, vers_minor, vers_patch, author);
+          } else {
+            std::printf("%s %d.%d by %s\n", prog_name, vers_major, vers_minor, author);
+          }
         }
         return false;
       default:
@@ -271,6 +275,9 @@ void Options::showHelp() const noexcept
   std::printf("  -T            (TIS only) Treat unrecognized input files as headerless TIS.\n");
   std::printf("  -I            Show file information and exit.\n");
   std::printf("  -V            Print version number and exit.\n");
+  std::printf("\n");
+  std::printf("Supported input file types: MOS V1, MOS V2, TIS V1, TIS V2.\n");
+  std::printf("Note: You can mix and match input files of each supported type.\n");
 }
 
 bool Options::addInput(const std::string &inFile) noexcept
