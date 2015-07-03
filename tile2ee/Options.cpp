@@ -234,7 +234,7 @@ void Options::showHelp() const noexcept
   std::printf("\nOptions:\n");
   std::printf("  -e            Do not halt on errors.\n");
   std::printf("  -s            Be silent.\n");
-  std::printf("  -d searchdir  Look for associated PVRZ files in this directory.\n");
+  std::printf("  -d searchdir  Look for referenced PVRZ files in this directory.\n");
   std::printf("                You can specify this option multiple times to add more\n");
   std::printf("                search directories. (Default: Same directory as input file)\n");
   std::printf("  -o output     Select output file or folder.\n");

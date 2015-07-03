@@ -16,7 +16,7 @@ Usage: tile2ee [options] infile [infile2 [...]]
 Options:
   -e            Do not halt on errors.
   -s            Be silent.
-  -d searchdir  Look for associated PVRZ files in this directory.
+  -d searchdir  Look for referenced PVRZ files in this directory.
                 You can specify this option multiple times to add more
                 search directories. (Default: Same directory as input file)
   -o output     Select output file or folder. 

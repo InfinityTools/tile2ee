@@ -4,8 +4,8 @@ TILE2EE
 Version: 0.1
 Author:  Argent77
 
-This tool converts palette-based MOS and TIS files (V1) into PVRZ-based MOS 
-and TIS files (V2) and vice versa.
+This tool allows you to convert palette-based MOS and TIS files (V1) into 
+PVRZ-based MOS and TIS files (V2) and vice versa.
 
 Supported conversions:
 * MOS V1 files will be automatically converted into MOS V2.
@@ -22,7 +22,7 @@ Usage: tile2ee [options] infile [infile2 [...]]
 Options:
   -e            Do not halt on errors.
   -s            Be silent.
-  -d searchdir  Look for associated PVRZ files in this directory.
+  -d searchdir  Look for referenced PVRZ files in this directory.
                 You can specify this option multiple times to add more
                 search directories. (Default: Same directory as input file)
   -o output     Select output file or folder. 
@@ -93,8 +93,8 @@ you can do so by modifying the file "config.mk" by hand.
 CONTACT
 -------
 
-If you have questions or comments please post them on Spellhold Studios 
-at http://www.shsforums.net/topic/?????-tile2ee-a-mos-and-tis-converter/ 
+If you have questions or comments, please post them on Spellhold Studios in 
+the respective topic on http://www.shsforums.net/forum/535-ie-modding-tools.
 or contact me by private message on the same forum.
 
 
