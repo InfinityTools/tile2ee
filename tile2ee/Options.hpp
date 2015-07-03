@@ -99,6 +99,7 @@ public:
   bool isOverwritePvrz() const noexcept { return m_overwritePvrz; }
   void setOverwritePvrz(bool b) noexcept { m_overwritePvrz = b; }
 
+  /** Get/set whether to limit conversion to a specific format. */
   int getConversionType() const noexcept { return m_conversionType; }
   void setConversionType(int type) noexcept;
 
@@ -128,9 +129,15 @@ public:
   int getQualityV1() const noexcept { return m_qualityV1; }
   int getQualityV2() const noexcept { return m_qualityV2; }
 
-  /** Number of threads to use for encoding/decoding. (0=autodetect) */
+  /** Set number of threads to use for encoding/decoding. (0=autodetect) */
   void setThreads(int v) noexcept;
+  /** Return number of threads to use for encoding/decoding. */
   int getThreads() const noexcept;
+  /**
+   * Return number of threads to use for encoding/decoding.
+   * \param evaluateAuto If true, returns actual number of threads. If false, returns 0 for autodetect.
+   */
+  int getThreads(bool evaluateAuto) const noexcept;
 
   /** Show statistics about the specified input file(s) only. */
   void setShowInfo(bool b) noexcept { m_showInfo = b; }
@@ -183,7 +190,7 @@ private:
   int                       m_qualityV2;      // DXTn compression quality (0:fast, 9:slow)
   int                       m_threads;        // how many threads to use for encoding/decoding
   int                       m_mosIndex;       // Start index of PVRZ files for MOS V2
-  int                       m_conversionType; // Type of conversion (auto, to V1 or to V2)
+  int                       m_conversionType; // Type of conversion (auto=0, V1=1 or V2=2)
   std::vector<std::string>  m_inFiles;
   std::vector<std::string>  m_searchPaths;    // list of search paths for WEDs and PVRZs
   std::string               m_outPath;        // file path (empty or with trailing path separator) only!

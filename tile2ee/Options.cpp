@@ -130,13 +130,13 @@ bool Options::init(int argc, char *argv[]) noexcept
         if (optarg != nullptr) {
           int ver = std::atoi(optarg);
           if (ver < 0 || ver > 2) {
-            std::printf("Invalid version specified for -f\n");
+            std::printf("Invalid type specified for -f\n");
             showHelp();
             return false;
           }
           setConversionType(ver);
         } else {
-          std::printf("Missing version value for -f\n");
+          std::printf("Missing type value for -f\n");
           showHelp();
           return false;
         }
@@ -422,7 +422,16 @@ void Options::setThreads(int v) noexcept
 
 int Options::getThreads() const noexcept
 {
-  return m_threads ? m_threads : getThreadPoolAutoThreads();
+  return getThreads(true);
+}
+
+int Options::getThreads(bool evaluateAuto) const noexcept
+{
+  if (evaluateAuto) {
+    return m_threads ? m_threads : getThreadPoolAutoThreads();
+  } else {
+    return m_threads;
+  }
 }
 
 std::string Options::getOptionsSummary(bool complete) const noexcept
@@ -433,6 +442,18 @@ std::string Options::getOptionsSummary(bool complete) const noexcept
     if (!sum.empty()) sum += ", ";
     sum += "halt on errors = ";
     sum += isHaltOnError() ? "enabled" : "disabled";
+  }
+
+  if (getConversionType() != DEF_CONVERSION_TYPE) {
+    std::string msg;
+    switch (getConversionType()) {
+      case 1: msg = "convert to V1 only"; break;
+      case 2: msg = "convert to V2 only"; break;
+    }
+    if (!msg.empty()) {
+      if (!sum.empty()) sum += ", ";
+      sum += msg;
+    }
   }
 
   if (complete || getQualityV1() != DEF_QUALITY_V1) {
@@ -448,7 +469,7 @@ std::string Options::getOptionsSummary(bool complete) const noexcept
   if (complete || isMosc() != DEF_MOSC) {
     if (!sum.empty()) sum += ", ";
     if (isMosc()) sum += "generate MOSC";
-    else sum += "convert generate MOS";
+    else sum += "generate MOS";
   }
 
   if (complete || assumeTis() != DEF_ASSUMETIS) {
@@ -462,10 +483,10 @@ std::string Options::getOptionsSummary(bool complete) const noexcept
     sum += "PVRZ start index = " + std::to_string(getMosIndex());
   }
 
-  if (complete || getThreads() != DEF_THREADS) {
+  if (complete || getThreads(false) != DEF_THREADS) {
     if (!sum.empty()) sum += ", ";
-    sum += "jobs = ";
-    if (getThreads() == 0) {
+    sum += "threads = ";
+    if (getThreads(false) == 0) {
       sum += "autodetected (" + std::to_string(getThreadPoolAutoThreads()) + ")";
     } else {
       sum += std::to_string(getThreads());
