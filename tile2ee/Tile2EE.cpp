@@ -97,6 +97,15 @@ bool Tile2EE::execute() noexcept
     std::string outputFile;
     if (!inputFile.empty()) {
       FileType fileType = Options::GetFileType(inputFile, getOptions().assumeTis());
+      if (fileType == FileType::UNKNOWN) {
+        retVal = false;
+        std::printf("Unknown file type: \"%s\"\n", inputFile.c_str());
+        if (getOptions().isHaltOnError()) {
+          return retVal;
+        } else {
+          continue;
+        }
+      }
 
       // checking conversion type
       if (fileType == FileType::TISV1 && getOptions().getConversionType() == 1) {
@@ -193,7 +202,7 @@ bool Tile2EE::execute() noexcept
           break;
         default:
           retVal = false;
-          std::printf("Unsupported file type: \"%s\"\n", inputFile.c_str());
+          std::printf("Unknown file type: \"%s\"\n", inputFile.c_str());
           if (getOptions().isHaltOnError()) {
             return retVal;
           }
