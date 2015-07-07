@@ -19,9 +19,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#ifdef _WIN32
+# include <windows.h>
+#else
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+#endif
 #include "File.hpp"
 
 namespace tc {
@@ -136,32 +140,57 @@ bool File::IsPathSeparator(char ch) noexcept
 
 bool File::IsDirectory(const std::string &fileName) noexcept
 {
+  bool retVal = false;
   if (!fileName.empty()) {
+#ifdef _WIN32
+    DWORD flags = ::GetFileAttributes(fileName.c_str());
+    if (flags != INVALID_FILE_ATTRIBUTES) {
+      retVal = (flags & FILE_ATTRIBUTE_DIRECTORY) != 0;
+    }
+#else
     struct stat s;
-    if (stat(fileName.c_str(), &s) != -1) {
+    if (::stat(fileName.c_str(), &s) != -1) {
       return S_ISDIR(s.st_mode);
     }
+#endif
   }
-  return false;
+  return retVal;
 }
 
 
 bool File::Exists(const std::string &path) noexcept
 {
+  bool retVal = false;
   if (!path.empty()) {
+#ifdef _WIN32
+    retVal = (::GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
+#else
     struct stat s;
-    return (stat(path.c_str(), &s) == 0);
+    retVal = (::stat(path.c_str(), &s) == 0);
+#endif
   }
-  return false;
+  return retVal;
 }
 
 long File::GetFileSize(const std::string &fileName) noexcept
 {
   if (!fileName.empty()) {
+#ifdef _WIN32
+    HANDLE h = ::CreateFile(fileName.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
+                            0, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0);
+    if (h != INVALID_HANDLE_VALUE) {
+      DWORD size = ::GetFileSize(h, NULL);
+      ::CloseHandle(h);
+      if (size != INVALID_FILE_SIZE) {
+        return size;
+      }
+    }
+#else
     struct stat s;
-    if (stat(fileName.c_str(), &s) != -1) {
+    if (::stat(fileName.c_str(), &s) != -1) {
       return s.st_size;
     }
+#endif
   }
   return -1L;
 }
@@ -182,6 +211,62 @@ bool File::RenameFile(const std::string &oldFileName, const std::string &newFile
     return (std::rename(oldFileName.c_str(), newFileName.c_str()) == 0);
   }
   return false;
+}
+
+bool File::IsEqual(const std::string &path1, const std::string &path2) noexcept
+{
+  bool retVal = false;
+
+  if (!path1.empty() && !path2.empty()) {
+#ifdef _WIN32
+    HANDLE h2 = ::CreateFile(path2.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
+                             0, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0);
+    HANDLE h1 = ::CreateFile(path1.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
+                             0, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0);
+    if (h1 == INVALID_HANDLE_VALUE || h2 == INVALID_HANDLE_VALUE) {
+      if (h2 != INVALID_HANDLE_VALUE) {
+        ::CloseHandle(h2);
+      }
+      if (h1 != INVALID_HANDLE_VALUE) {
+        ::CloseHandle(h1);
+      }
+      return retVal;
+    }
+
+    BY_HANDLE_FILE_INFORMATION info1, info2;
+    bool b1 = ::GetFileInformationByHandle(h1, &info1);
+    bool b2 = ::GetFileInformationByHandle(h2, &info2);
+    if (!b1 || !b2) {
+      ::CloseHandle(h2);
+      ::CloseHandle(h1);
+      return retVal;
+    }
+
+    retVal = (info1.dwVolumeSerialNumber == info2.dwVolumeSerialNumber) &&
+             (info1.nFileIndexHigh == info2.nFileIndexHigh) &&
+             (info1.nFileIndexLow == info2.nFileIndexLow) &&
+             (info1.nFileSizeHigh == info2.nFileSizeHigh) &&
+             (info1.nFileSizeLow == info2.nFileSizeLow) &&
+             (info1.ftLastWriteTime.dwLowDateTime == info2.ftLastWriteTime.dwLowDateTime) &&
+             (info1.ftLastWriteTime.dwHighDateTime == info2.ftLastWriteTime.dwHighDateTime);
+
+      ::CloseHandle(h2);
+      ::CloseHandle(h1);
+
+#else
+      struct stat s1, s2;
+      int e2 = ::stat(path2.c_str(), &s2);
+      int e1 = ::stat(path1.c_str(), &s1);
+      if (e1 == 0 && e2 == 0) {
+        retVal = (s1.st_dev == s2.st_dev) &&
+                 (s1.st_ino == s2.st_ino) &&
+                 (s1.st_size == s2.st_size) &&
+                 (s1.st_mtime == s2.st_mtime);
+      }
+
+#endif
+  }
+  return retVal;
 }
 
 

@@ -242,9 +242,7 @@ void Options::showHelp() const noexcept
   std::printf("                You can specify this option multiple times to add more\n");
   std::printf("                search directories. (Default: Same directory as input file)\n");
   std::printf("  -o output     Select output file or folder.\n");
-  std::printf("                (Default: Outputs files into same folder as input files and\n");
-  std::printf("                          adds suffix \"-0\", \"-1\", ... if file exists.)\n");
-  std::printf("                (Note: Output file works only with single input file.)\n");
+  std::printf("                (Note: Output file works only with single input file!)\n");
   std::printf("  -i index      (MOS only) Start index for PVRZ files. (Default: 1000)\n");
   std::printf("                (Note: Existing PVRZ files will be detected and skipped\n");
   std::printf("                       unless option -w has been specified.)\n");
@@ -506,6 +504,7 @@ std::string Options::getOptionsSummary(bool complete) const noexcept
 
 // ----------------------- STATIC METHODS -----------------------
 
+
 FileType Options::GetFileType(const std::string &fileName, bool assumeTis) noexcept
 {
   if (!fileName.empty()) {
@@ -585,61 +584,10 @@ std::string Options::GetOutputFileName(const std::string &path, const std::strin
     outFileExt = File::ExtractFileExt(inputFile);
 
     // making output file unique if necessary
-    std::string output(File::CreateFileName(outPath, outFileBase + outFileExt));
-    for (int idx = 0; !overwrite && File::Exists(output); idx++) {
-      std::string suffix("-" +  std::to_string(idx));
-      output = File::CreateFileName(outPath, outFileBase + outFileExt + suffix);
-    }
-    return output;
+    return File::CreateFileName(outPath, outFileBase + outFileExt);
   }
   return defString;
 }
-
-
-bool Options::SplitFileName(const std::string &inputFile, std::string *path,
-                            std::string *fileBase, std::string *fileExt) noexcept
-{
-  if (!inputFile.empty()) {
-    std::string fileName(inputFile);
-
-    // extracting path (if available)
-    size_t pos = std::max(fileName.find_last_of('/'), fileName.find_last_of('\\'));
-    if (pos != std::string::npos) {
-      if (path != nullptr) {
-        path->assign(fileName.substr(0, pos + 1));
-      }
-      fileName.erase(0, pos + 1);
-    } else {
-      if (path != nullptr) {
-        path->clear();
-      }
-    }
-
-    // extracting file base
-    pos = fileName.find_last_of('.');
-    if (pos != std::string::npos) {
-      if (fileBase != nullptr) {
-        fileBase->assign(fileName.substr(0, pos));
-      }
-      fileName.erase(0, pos);
-    } else {
-      if (fileBase != nullptr) {
-        fileBase->assign(fileName);
-      }
-      fileName.clear();
-    }
-
-    // extracting file extension
-    if (fileExt != nullptr) {
-      fileExt->assign(fileName);
-    }
-
-    return true;
-  }
-  return false;
-}
-
-
 
 std::string Options::GenerateTisPvrzName(const std::string &tisName, int index) noexcept
 {

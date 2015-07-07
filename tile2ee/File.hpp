@@ -51,7 +51,6 @@ public:
   /** Returns true if the specified character is a path separator. */
   static bool IsPathSeparator(char ch) noexcept;
 
-public:
   /** Returns true only if the given path is a directory. */
   static bool IsDirectory(const std::string &fileName) noexcept;
 
@@ -69,6 +68,9 @@ public:
 
   /** Changes the name of a file. */
   static bool RenameFile(const std::string &oldFileName, const std::string &newFileName) noexcept;
+
+  /** Returns whether the two specified path strings are pointing to the same file. */
+  static bool IsEqual(const std::string &path1, const std::string &path2) noexcept;
 
 public:
   /** Opens a file in the specified mode. */

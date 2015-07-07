@@ -49,14 +49,6 @@ public:
   static std::string GetOutputFileName(const std::string &path, const std::string inputFile,
                                        FileType type, bool overwrite) noexcept;
 
-  /**
-   * Splits "inputFile" into a path string, filename string without extension and
-   * extension (including separator char).
-   * Returns success state of the operation.
-   */
-  static bool SplitFileName(const std::string &inputFile, std::string *path,
-                            std::string *fileBase, std::string *fileExt) noexcept;
-
   /** Returns a PVRZ filename for TIS files, based on the specified parameters. */
   static std::string GenerateTisPvrzName(const std::string &tisName, int index) noexcept;
 

@@ -142,6 +142,11 @@ bool Tile2EE::execute() noexcept
         if (getOptions().isHaltOnError()) {
           return retVal;
         }
+      } else if (File::IsEqual(inputFile, outputFile)) {
+        std::printf("Error: Input file and output file are equal: %s\n", inputFile.c_str());
+        if (getOptions().isHaltOnError()) {
+          return retVal;
+        }
       }
 
       // converting file
