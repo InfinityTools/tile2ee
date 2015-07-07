@@ -20,8 +20,6 @@ Options:
                 You can specify this option multiple times to add more
                 search directories. (Default: Same directory as input file)
   -o output     Select output file or folder. 
-                (Default: Outputs files into same folder as input files and 
-                          adds suffix "-0", "-1", ..., if file exists.)
                 (Note: Output file works only with single input file.)
   -i index      (MOS only) Start index for PVRZ files. (Default: 1000)
                 (Note: Existing PVRZ files will be detected and skipped
