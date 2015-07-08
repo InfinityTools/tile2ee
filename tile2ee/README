@@ -1,7 +1,7 @@
 TILE2EE
 ~~~~~~~
 
-Version: 0.1
+Version: 0.2
 Author:  Argent77
 
 This tool allows you to convert palette-based MOS and TIS files (V1) into 
@@ -101,3 +101,7 @@ Version history
 
 v0.1 (2015-07-03)
   * Initial release
+
+v0.2 (2015-07-08)
+  * Prevent overwriting input files by output files
+  * Existing output filenames will now be overwritten
