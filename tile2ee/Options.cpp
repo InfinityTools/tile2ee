@@ -42,10 +42,11 @@ const int Options::DEF_QUALITY_V1       = 4;
 const int Options::DEF_QUALITY_V2       = 9;
 const int Options::DEF_THREADS          = 0;
 const int Options::DEF_MOS_INDEX        = 1000;
+const int Options::DEF_TIS_PAGE         = 0;
 const int Options::DEF_CONVERSION_TYPE  = 0;
 
 // Supported parameter names
-const char Options::ParamNames[] = "esd:o:i:f:wzj:q:TIV";
+const char Options::ParamNames[] = "esd:o:i:p:f:wzj:q:TIV";
 
 Options::Options() noexcept
 : m_isSilent(DEF_SILENT)
@@ -58,6 +59,7 @@ Options::Options() noexcept
 , m_qualityV2(DEF_QUALITY_V2)
 , m_threads(DEF_THREADS)
 , m_mosIndex(DEF_MOS_INDEX)
+, m_tisPage(DEF_TIS_PAGE)
 , m_conversionType(DEF_CONVERSION_TYPE)
 , m_inFiles()
 , m_searchPaths()
@@ -122,6 +124,21 @@ bool Options::init(int argc, char *argv[]) noexcept
           setMosIndex(idx);
         } else {
           std::printf("Missing index value for -i\n");
+          showHelp();
+          return false;
+        }
+        break;
+      case 'p':
+        if (optarg != nullptr) {
+          int idx = std::atoi(optarg);
+          if (idx < 0 || idx > 99) {
+            std::printf("PVRZ page is out of range for -p: %d\n", idx);
+            showHelp();
+            return false;
+          }
+          setTisPage(idx);
+        } else {
+          std::printf("Missing page value for -p\n");
           showHelp();
           return false;
         }
@@ -246,6 +263,8 @@ void Options::showHelp() const noexcept
   std::printf("  -i index      (MOS only) Start index for PVRZ files. (Default: 1000)\n");
   std::printf("                (Note: Existing PVRZ files will be detected and skipped\n");
   std::printf("                       unless option -w has been specified.)\n");
+  std::printf("  -p page       (TIS only) Starting page number for PVRZ files. (Default: 0)\n");
+  std::printf("                (Caution: Total range of this value is limited to 0..99!)\n");
   std::printf("  -f type       Force type of file conversion. Skips files that are already\n");
   std::printf("                in the desired target format.\n");
   std::printf("                Supported values:\n");
@@ -378,6 +397,13 @@ void Options::setMosIndex(int index) noexcept
 {
   if (index >= 0 && index <= 99999) {
     m_mosIndex = index;
+  }
+}
+
+void Options::setTisPage(int page) noexcept
+{
+  if (page >= 0 && page <= 99) {
+    m_tisPage = page;
   }
 }
 

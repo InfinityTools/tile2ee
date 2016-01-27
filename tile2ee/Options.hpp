@@ -87,6 +87,10 @@ public:
   int getMosIndex() const noexcept { return m_mosIndex; }
   void setMosIndex(int index) noexcept;
 
+  /** Get/set start page for PVRZ files of TIS V2. */
+  int getTisPage() const noexcept { return m_tisPage; }
+  void setTisPage(int page) noexcept;
+
   /** Inditates whether to overwrite PVRZ files (MOS only). */
   bool isOverwritePvrz() const noexcept { return m_overwritePvrz; }
   void setOverwritePvrz(bool b) noexcept { m_overwritePvrz = b; }
@@ -168,6 +172,7 @@ private:
   static const int          DEF_QUALITY_V2;
   static const int          DEF_THREADS;
   static const int          DEF_MOS_INDEX;
+  static const int          DEF_TIS_PAGE;
   static const int          DEF_CONVERSION_TYPE;
 
   static const char         ParamNames[];
@@ -182,6 +187,7 @@ private:
   int                       m_qualityV2;      // DXTn compression quality (0:fast, 9:slow)
   int                       m_threads;        // how many threads to use for encoding/decoding
   int                       m_mosIndex;       // Start index of PVRZ files for MOS V2
+  int                       m_tisPage;        // Start page of PVRZ files for TIS V2
   int                       m_conversionType; // Type of conversion (auto=0, V1=1 or V2=2)
   std::vector<std::string>  m_inFiles;
   std::vector<std::string>  m_searchPaths;    // list of search paths for WEDs and PVRZs

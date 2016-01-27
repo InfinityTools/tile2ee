@@ -98,6 +98,7 @@ bool Graphics::tisV1ToTisV2(const std::string &inFile, const std::string &outFil
 
     // converting tiles
     int tileX = 0, tileY = 0, tilePage = 0;
+    int baseTilePage = getOptions().getTisPage();
     std::vector<BinPack2D> binpacks;
     std::vector<Texture> textures;
     BytePtr ptrPalette(new uint8_t[PALETTE_SIZE], std::default_delete<uint8_t[]>());
@@ -129,10 +130,14 @@ bool Graphics::tisV1ToTisV2(const std::string &inFile, const std::string &outFil
             }
           }
           if (tilePage < 0) {
+            if (baseTilePage + textures.size() > 99) {
+              std::printf("PVRZ page index is out of range: %d\n", (int)(baseTilePage + textures.size()));
+              return false;
+            }
             binpacks.emplace_back(BinPack2D(1024, 1024));
             textures.emplace_back(Texture(getOptions(), 1024, 1024));
             Texture &texture = textures.at(textures.size() - 1);
-            texture.setIndex(textures.size() - 1);
+            texture.setIndex(baseTilePage + textures.size() - 1);
             texture.setEncoding(Encoding::BC1);
             startIndex = binpacks.size() - 1;
           }
@@ -140,7 +145,7 @@ bool Graphics::tisV1ToTisV2(const std::string &inFile, const std::string &outFil
       }
 
       // writing tile info to output TIS
-      v32 = tilePage; v32 = get32u_le(&v32);
+      v32 = baseTilePage + tilePage; v32 = get32u_le(&v32);
       if (fout.write(&v32, 4, 1) != 1) { return false; }
       v32 = tileX; v32 = get32u_le(&v32);
       if (fout.write(&v32, 4, 1) != 1) { return false; }
@@ -164,7 +169,7 @@ bool Graphics::tisV1ToTisV2(const std::string &inFile, const std::string &outFil
 
         TileDataPtr tileData(new TileData(getOptions()));
         tileData->setEncoding(Encoding::BC1);
-        tileData->setIndex(textureIdx);
+        tileData->setIndex(texture.getIndex());
         tileData->setInputType(FileType::TISV1);
         tileData->setInputData(texture.getData());
         tileData->setOutputData(ptrEncoded);
