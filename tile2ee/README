@@ -108,5 +108,5 @@ v0.2 (2015-07-08)
   * Prevent overwriting input files by output files
   * Existing output filenames will now be overwritten
 
-v0.3 (????-??-??)
+v0.3 (2016-02-15)
   * Added option -p: Starting page number for TISv2-related PVRZ files
