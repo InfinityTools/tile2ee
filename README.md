@@ -24,6 +24,8 @@ Options:
   -i index      (MOS only) Start index for PVRZ files. (Default: 1000)
                 (Note: Existing PVRZ files will be detected and skipped
                        unless option -w has been specified.)
+  -p page       (TIS only) Starting page number for PVRZ files. (Default: 0)
+                (Caution: Total range of this value is limited to 0..99!)
   -f type       Force type of file conversion. Skips files already matching 
                 the desired file format.
                 Supported values:

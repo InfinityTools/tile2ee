@@ -1,7 +1,7 @@
 TILE2EE
 ~~~~~~~
 
-Version: 0.2
+Version: 0.3
 Author:  Argent77
 
 This tool allows you to convert palette-based MOS and TIS files (V1) into 
@@ -30,6 +30,8 @@ Options:
   -i index      (MOS only) Start index for PVRZ files. (Default: 1000)
                 (Note: Existing PVRZ files will be detected and skipped
                        unless option -w has been specified.)
+  -p page       (TIS only) Starting page number for PVRZ files. (Default: 0)
+                (Caution: Total range of this value is limited to 0..99!)
   -f type       Force type of file conversion. Skips files already matching 
                 the desired file format.
                 Supported values:
@@ -105,3 +107,6 @@ v0.1 (2015-07-03)
 v0.2 (2015-07-08)
   * Prevent overwriting input files by output files
   * Existing output filenames will now be overwritten
+
+v0.3 (????-??-??)
+  * Added option -p: Starting page number for TISv2-related PVRZ files
