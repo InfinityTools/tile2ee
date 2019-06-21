@@ -7,7 +7,7 @@ include config.mk
 CXX           ?= g++
 CXXFLAGS      = -c -Wall -O2 -std=c++11 -msse -mfpmath=sse -I$(ZLIB_INCLUDE) -I$(PNGQUANT_INCLUDE) -I$(SQUISH_INCLUDE)
 LDFLAGS       = -L$(ZLIB_LIB) -L$(PNGQUANT_LIB) -L$(SQUISH_LIB)
-LIBS          = -lz -limagequant -lsquish
+LIBS          = -s -lz -limagequant -lsquish
 EXECUTABLE    = tile2ee
 
 ifeq ($(OS),Windows_NT)
@@ -17,7 +17,7 @@ ifeq ($(OS),Windows_NT)
   ifeq ($(USE_WINTHREADS),1)
     CXXFLAGS    += -mwindows -DUSE_WINTHREADS=1
   else
-    LIBS        += -pthread
+    LIBS        += -pthread -fopenmp
   endif
 else
   RM          = rm

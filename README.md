@@ -67,8 +67,8 @@ tile2ee is distributed under the terms and conditions of the MIT license. This l
 ### BUILDING TILE2EE
 **Dependencies:**
 - zlib (http://www.zlib.net/)
-- pngquant (https://github.com/pornel/pngquant/)
-- libsquish (https://code.google.com/p/libsquish/)
+- libimagequant (https://pngquant.org/lib/)
+- libsquish (https://sourceforge.net/projects/libsquish/)
 
 External libraries and include files are assumed to be located in the subfolders "zlib", "squish" and "pngquant". The libraries are providing their own instructions how to compile them. Afterwards call "make" to build tile2ee. **Note:** You'll need a compiler that supports the C++11 standard.
 

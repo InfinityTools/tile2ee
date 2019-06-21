@@ -68,8 +68,7 @@ LICENSE
 ~~~~~~~
 
 tile2ee is distributed under the terms and conditions of the MIT license.
-This license is specified at the top of each source file and must be preserved 
-in its entirety.
+See LICENSE file for more information.
 
 
 BUILDING TILE2EE
@@ -77,11 +76,11 @@ BUILDING TILE2EE
 
 Dependencies:
 - zlib (http://www.zlib.net/)
-- pngquant (https://github.com/pornel/pngquant/)
-- libsquish (https://code.google.com/p/libsquish/)
+- libimagequant (https://pngquant.org/lib/)
+- libsquish (https://sourceforge.net/projects/libsquish/)
 
 External libraries and include files are assumed to be located in the 
-subfolders "zlib", "squish" and "pngquant". The libraries are 
+subfolders "zlib", "squish" and "libimagequant". The libraries are 
 providing their own instructions how to compile them. Afterwards call 
 "make" to build tile2ee.
 Note: You'll need a compiler that supports the C++11 standard.
@@ -101,12 +100,12 @@ or contact me by private message on the same forum.
 Version history
 ---------------
 
-v0.1 (2015-07-03)
-  * Initial release
+v0.3 (2016-02-15)
+  * Added option -p: Starting page number for TISv2-related PVRZ files
 
 v0.2 (2015-07-08)
   * Prevent overwriting input files by output files
   * Existing output filenames will now be overwritten
 
-v0.3 (2016-02-15)
-  * Added option -p: Starting page number for TISv2-related PVRZ files
+v0.1 (2015-07-03)
+  * Initial release
