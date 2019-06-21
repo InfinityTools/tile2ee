@@ -951,7 +951,7 @@ BytePtr Graphics::readMosV1(File &fin, unsigned &width, unsigned &height, unsign
     mosSize = fin.getsize();
     if (mosSize < 24) {
       std::printf("MOS size too small\n");
-      return false;
+      return retVal;
     }
     fin.seek(0, SEEK_SET);
     retVal.reset(new uint8_t[mosSize], std::default_delete<uint8_t[]>());
